@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file acb.module 
+ */
+
+
+/**
+ * Implements hook_help().
+ */
+function acb_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help/#acb':
+      return
+        '<p>'. t('Acb it\'s an alternative layout sistem to Drupal block core, context, panelizer, and panels.') .'</p>'.
+        '<p>'. t('The aproach in Acb module is thay you can select by url where do you want to have your blocks') .'</p>';
+      break;
+  }
+}
+
+
+/**
+ * Implements hook_permission().
+ */
+function acb_permission() {
+  return [
+
+  ];
+}
+/**
+ * Implements hook_menu().
+ */
+function acb_menu() {
+  $items = [];
+
+
+  $items['node/%node/block_layout'] = [
+    'title' => 'Block layout',
+    'page callback' => 'acb_node_configure_block',
+    'page arguments' => array('node,1'),
+    'access arguments' => array('access devel information'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'src/Helper/acb_configure_block_place.php'
+  ];
+
+  $items['admin/structure/acb'] = [
+    'title' => 'Alternative block layout',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['acb_layout_form'],
+    'access arguments' => ['access devel information'],
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'src/Form/acb_layout_form.php'
+  ];
+
+  return $items;
+}
+/*
+https://api.drupal.org/api/drupal/modules!block!block.api.php/function/hook_block_list_alter/7.x
+*/
