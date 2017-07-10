@@ -52,6 +52,13 @@ function acb_menu() {
     'file' => 'src/Form/acb_layout_form.php'
   ];
 
+  $items['acb/acb_load_block_autocomplete_callback'] = [
+    'page callback' => 'acb_load_block',
+    'file' =>'src/Helper/acb_load_block.php',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+  ];
+
   return $items;
 }
 /*

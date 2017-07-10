@@ -22,7 +22,7 @@ function acb_layout_form($form,$form_state,$objet = NULL, $objet = NULL,
     '#size' => 60,
     '#maxlength' => 128,
     '#required' => TRUE,
-    '#element_validate' => ['_acb_validate_url'],
+    //'#element_validate' => ['_acb_validate_url'],
   ];
 
   $form['theme'] = [
@@ -50,6 +50,7 @@ function acb_layout_form($form,$form_state,$objet = NULL, $objet = NULL,
       $form['theme'][$region_name][$machine_name]['field'] = [
         '#type' => 'textfield',
         '#title' => 'Block',
+        '#autocomplete_path' => 'acb/acb_load_block_autocomplete_callback'
       ];
 
 
