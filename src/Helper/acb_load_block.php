@@ -20,7 +20,11 @@ function acb_load_block ($string = "") {
   drupal_json_output($matches);
 }
 
-
+/**
+ * @param array $list
+ *
+ * @return array
+ */
 function acb_get_enabled_themes(array $list){
   return array_filter($list,
     function($theme){
@@ -29,4 +33,16 @@ function acb_get_enabled_themes(array $list){
       }
     }
   );
+}
+
+/**
+ * @param array $list_theme
+ *
+ * @return array
+ */
+function acb_get_regions(array $list_theme){
+
+  return array_map(function($theme){
+    return system_region_list($theme->name);
+  }, $list_theme);
 }
