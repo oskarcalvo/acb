@@ -1,0 +1,31 @@
+<?php
+
+function acb_schema() {
+  $schema['acb_layout'] = [
+    'description' => t('Stores the layout configurations'),
+    'fields' => [
+      'acbid' => [
+        'description' => 'The primary indentifier.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'url' => [
+        'description' => 'The url to apply the layout.',
+        'type' => 'varchar',
+        'lenght' => 255,
+        'not null' => TRUE,
+        'default' => ''
+      ],
+      'value' => [
+        'description' => 'The value of the variable.',
+        'type' => 'blob',
+        'not null' => TRUE,
+        'size' => 'big',
+      ],
+    ],
+
+  ];
+
+  return $schema;
+}
