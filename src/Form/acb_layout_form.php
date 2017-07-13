@@ -6,15 +6,11 @@
 
 function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
 
-
   $list_themes = list_themes();
-
   $list_themes = acb_get_enabled_themes($list_themes);
+  $theme_regions = acb_get_regions($list_themes);
 
-  $theme_regions = array_map(function($theme){
-    return system_region_list($theme->name);
-  }, $list_themes);
-
+  $form['#tree'] = TRUE;
 
   $form['url'] = [
     '#type' => 'textfield',
@@ -26,12 +22,12 @@ function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
     //'#element_validate' => ['_acb_validate_url'],
   ];
 
-  /*
+
   $form['theme'] = [
     '#type' => 'vertical_tabs',
-    '#title' => 'wadus',
+    '#title' => t('Configure layout'),
   ];
-*/
+
 
   foreach ($theme_regions as $theme_name => $regions) {
 
@@ -46,7 +42,6 @@ function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
 
       if(empty($form_state['block_number'][$theme_name][$machine_name])){
         $form_state['block_number'][$theme_name][$machine_name] = 1;
-
       }
 
       $form['theme'][$theme_name][$machine_name] = [
@@ -65,15 +60,18 @@ function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
         ];
       }
 
+
       $form['theme'][$theme_name][$machine_name]['add_item'] = array(
         '#type' => 'submit',
         '#value' => t("Add another block in $theme_name - $machine_name"),
         '#submit' => ['acb_layout_form_add_item'],
         '#attributes' => [
           'theme' => [$theme_name],
-          'region' => [$machine_name]
+          'region' => [$machine_name],
+          'block_number' => $i,
         ],
       );
+      unset($i);
 
     }
   }
@@ -87,21 +85,9 @@ function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
 function acb_layout_form_add_item($form, &$form_state) {
 
 
-  if(isset($form_state['clicked_button']['#attributes']['region'][0])) {
-    $region = $form_state['clicked_button']['#attributes']['region'][0];
-  }
+  $region = $form_state['clicked_button']['#attributes']['region'][0];
+  $theme = $form_state['clicked_button']['#attributes']['theme'][0];
+  $form_state['block_number'][$theme][$region] = $form_state['clicked_button']['#attributes']['block_number'];
+  $form_state['rebuild'] = TRUE;
 
-  if(isset($form_state['clicked_button']['#attributes']['theme'][0])){
-    $theme = $form_state['clicked_button']['#attributes']['theme'][0];
-  }
-  if(isset($region) && isset($theme) ) {
-
-    if( !isset($form_state['block_number'][$theme][$region])){
-      $form_state['block_number'][$theme][$region] = 1;
-    }else{
-      $form_state['block_number'][$theme][$region]++;
-    }
-    $form_state['rebuild'] = TRUE;
-    $wadus = '';
-  }
 }
