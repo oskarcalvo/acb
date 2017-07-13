@@ -19,3 +19,14 @@ function acb_load_block ($string = "") {
   }
   drupal_json_output($matches);
 }
+
+
+function acb_get_enabled_themes(array $list){
+  return array_filter($list,
+    function($theme){
+      if($theme->status == 1) {
+        return $theme;
+      }
+    }
+  );
+}
