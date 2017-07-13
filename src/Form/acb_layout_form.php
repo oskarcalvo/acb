@@ -4,11 +4,12 @@
  * @file Form to configure the layout.
  */
 
-function acb_layout_form($form,$form_state,$objet = NULL, $objet = NULL,
-                         $layout = NULL) {
+function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
 
 
   $list_themes = list_themes();
+
+  $list_themes = acb_get_enabled_themes($list_themes);
 
   $theme_regions = array_map(function($theme){
     return system_region_list($theme->name);
@@ -25,20 +26,29 @@ function acb_layout_form($form,$form_state,$objet = NULL, $objet = NULL,
     //'#element_validate' => ['_acb_validate_url'],
   ];
 
+  /*
   $form['theme'] = [
     '#type' => 'vertical_tabs',
     '#title' => 'wadus',
   ];
+*/
 
-  foreach ($theme_regions as $theme_name => $region_data) {
+  foreach ($theme_regions as $theme_name => $regions) {
 
     $form['theme'][$theme_name] = [
       '#type' => 'fieldset',
       '#title' => $theme_name,
       '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
     ];
 
-    foreach ($region_data as $machine_name => $human_name) {
+    foreach ($regions as $machine_name => $human_name) {
+
+      if(empty($form_state['block_number'][$theme_name][$machine_name])){
+        $form_state['block_number'][$theme_name][$machine_name] = 1;
+
+      }
+
       $form['theme'][$theme_name][$machine_name] = [
         '#type' => 'fieldset',
         '#title' => $human_name,
@@ -47,11 +57,13 @@ function acb_layout_form($form,$form_state,$objet = NULL, $objet = NULL,
         '#description' => t('Set the blocks for this region.'),
       ];
 
-      $form['theme'][$theme_name][$machine_name]['block'] = [
-        '#type' => 'textfield',
-        '#title' => 'Block',
-        '#autocomplete_path' => 'acb/acb_load_block_autocomplete_callback'
-      ];
+      for($i = 1; $i <= $form_state['block_number'][$theme_name][$machine_name]; $i++) {
+        $form['theme'][$theme_name][$machine_name][$i]['block'] = [
+          '#type' => 'textfield',
+          '#title' => t('Block'),
+          '#autocomplete_path' => 'acb/acb_load_block_autocomplete_callback'
+        ];
+      }
 
       $form['theme'][$theme_name][$machine_name]['add_item'] = array(
         '#type' => 'submit',
@@ -62,7 +74,6 @@ function acb_layout_form($form,$form_state,$objet = NULL, $objet = NULL,
           'region' => [$machine_name]
         ],
       );
-
 
     }
   }
@@ -75,8 +86,6 @@ function acb_layout_form($form,$form_state,$objet = NULL, $objet = NULL,
 
 function acb_layout_form_add_item($form, &$form_state) {
 
-  $region = '';
-  $theme = '';
 
   if(isset($form_state['clicked_button']['#attributes']['region'][0])) {
     $region = $form_state['clicked_button']['#attributes']['region'][0];
@@ -85,8 +94,14 @@ function acb_layout_form_add_item($form, &$form_state) {
   if(isset($form_state['clicked_button']['#attributes']['theme'][0])){
     $theme = $form_state['clicked_button']['#attributes']['theme'][0];
   }
-  if(!empty($region) && !empty($theme)) {
-    $form_state['theme'][$theme][$region]['block']['number']++;
+  if(isset($region) && isset($theme) ) {
+
+    if( !isset($form_state['block_number'][$theme][$region])){
+      $form_state['block_number'][$theme][$region] = 1;
+    }else{
+      $form_state['block_number'][$theme][$region]++;
+    }
     $form_state['rebuild'] = TRUE;
+    $wadus = '';
   }
 }
