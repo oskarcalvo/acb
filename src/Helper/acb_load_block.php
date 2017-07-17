@@ -21,18 +21,26 @@ function acb_load_block ($string = "") {
 }
 
 /**
- * @param array $list
+ * @param array $list list of themes in the website.
  *
  * @return array
  */
 function acb_get_enabled_themes(array $list){
-  return array_filter($list,
-    function($theme){
-      if($theme->status == 1) {
-        return $theme;
-      }
+
+    $cache = cache_get('acb_enabled_themes');
+    if (isset($cache->data)) {
+      $data = $cache->data;
     }
-  );
+    else {
+      $data = array_filter($list, function ($theme) {
+        if ($theme->status == 1) {
+          return $theme;
+        }
+      });
+      cache_set('acb_enabled_themes', $data);
+    }
+
+  return $data;
 }
 
 /**
@@ -42,7 +50,21 @@ function acb_get_enabled_themes(array $list){
  */
 function acb_get_regions(array $list_theme){
 
-  return array_map(function($theme){
-    return system_region_list($theme->name);
-  }, $list_theme);
+
+    $cache = cache_get('acb_theme_regions');
+    if (isset($cache->data)) {
+      $data = $cache->data;
+    }
+    else {
+      $data = array_map(function ($theme) {
+        return system_region_list($theme->name);
+      }, $list_theme);
+      cache_set('acb_theme_regions', $data);
+    }
+
+  return $data;
+}
+
+function acb_clean_submited_values(array $values) {
+
 }
