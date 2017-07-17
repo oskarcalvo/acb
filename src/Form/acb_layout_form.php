@@ -4,7 +4,7 @@
  * @file Form to configure the layout.
  */
 
-function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
+function acb_layout_form($form, $form_state, $path, $origin) {
 
   $list_themes = list_themes();
   $list_themes = acb_get_enabled_themes($list_themes);
@@ -18,9 +18,17 @@ function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
     '#default_value' => '',
     '#size' => 60,
     '#maxlength' => 128,
-    //'#required' => TRUE,
-    //'#element_validate' => ['_acb_validate_url'],
+    '#required' => TRUE,
+    '#element_validate' => ['_acb_validate_url'],
   ];
+
+  if(isset($origin) && $origin && isset($path) && $path) {
+    unset($form['url']['#required']);
+    unset($form['url']['#element_validate']);
+    $form['url']['#default_value'] = $path;
+    $form['url']['#disabled'] =  TRUE;
+    $form['url']['#type'] = 'hidden';
+  }
 
 
   $form['theme'] = [
@@ -60,7 +68,6 @@ function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
         ];
       }
 
-
       $form['theme'][$theme_name][$machine_name]['add_item'] = array(
         '#type' => 'submit',
         '#value' => t("Add another block in $theme_name - $machine_name"),
@@ -81,13 +88,20 @@ function acb_layout_form($form,$form_state,$objet = NULL, $layout = NULL) {
   return $form;
 }
 
-
+/**
+ * @param $form
+ * @param $form_state
+ */
 function acb_layout_form_add_item($form, &$form_state) {
-
 
   $region = $form_state['clicked_button']['#attributes']['region'][0];
   $theme = $form_state['clicked_button']['#attributes']['theme'][0];
   $form_state['block_number'][$theme][$region] = $form_state['clicked_button']['#attributes']['block_number'];
   $form_state['rebuild'] = TRUE;
 
+}
+
+function acb_layout_form_submit($form, &$form_state) {
+  
+  $values = $form_state['values'];
 }
