@@ -24,7 +24,10 @@ function acb_help($path, $arg) {
  */
 function acb_permission() {
   return [
-
+    'administer acb layout' => [
+      'title' => t('Administer acb layout'),
+      'description' => t('Perfom administration tasks for acb module.'),
+    ],
   ];
 }
 /**
@@ -38,7 +41,7 @@ function acb_menu() {
     'title' => 'Block layout',
     'page callback' => 'acb_node_configure_block',
     'page arguments' => array('node,1'),
-    'access arguments' => array('access devel information'),
+    'access arguments' => array('administer acb layout'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'src/Helper/acb_configure_block_place.php'
   ];
@@ -47,7 +50,7 @@ function acb_menu() {
     'title' => 'Alternative block layout',
     'page callback' => 'drupal_get_form',
     'page arguments' => ['acb_layout_form'],
-    'access arguments' => ['access devel information'],
+    'access arguments' => ['administer acb layout'],
     'type' => MENU_NORMAL_ITEM,
     'file' => 'src/Form/acb_layout_form.php'
   ];
