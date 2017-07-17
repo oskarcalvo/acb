@@ -52,11 +52,15 @@ function acb_layout_form($form, $form_state, $path, $origin) {
         $form_state['block_number'][$theme_name][$machine_name] = 1;
       }
 
+
+      $collapsed = ($form_state['block_number'][$theme_name][$machine_name] >
+        1) ? FALSE : TRUE;
+
       $form['theme'][$theme_name][$machine_name] = [
         '#type' => 'fieldset',
         '#title' => $human_name,
         '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
+        '#collapsed' => $collapsed,
         '#description' => t('Set the blocks for this region.'),
       ];
 
