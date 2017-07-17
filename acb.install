@@ -5,26 +5,25 @@ function acb_schema() {
     'description' => t('Stores the layout configurations'),
     'fields' => [
       'acbid' => [
-        'description' => 'The primary indentifier.',
         'type' => 'serial',
-        'unsigned' => TRUE,
         'not null' => TRUE,
+        'unsigned' => TRUE,
+        'description' => 'Primary Key: Unique acb id.',
       ],
       'url' => [
-        'description' => 'The url to apply the layout.',
         'type' => 'varchar',
-        'lenght' => 255,
+        'length' => 255,
         'not null' => TRUE,
-        'default' => ''
+        'description' => 'The url to apply the layout.',
       ],
-      'value' => [
-        'description' => 'The value of the variable.',
+      'data' => [
         'type' => 'blob',
         'not null' => TRUE,
         'size' => 'big',
+        'description' => 'The value of the variable.',
       ],
     ],
-
+    'primary key' => ['acbid'],
   ];
 
   return $schema;
