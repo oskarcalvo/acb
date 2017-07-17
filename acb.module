@@ -40,7 +40,7 @@ function acb_menu() {
   $items['node/%node/block_layout'] = [
     'title' => 'Block layout',
     'page callback' => 'acb_node_configure_block',
-    'page arguments' => array('node,1'),
+    'page arguments' => array('node',1),
     'access arguments' => array('administer acb layout'),
     'type' => MENU_LOCAL_TASK,
     'file' => 'src/Helper/acb_configure_block_place.php'
