@@ -4,13 +4,15 @@
  * @file Form to configure the layout.
  */
 
-function acb_layout_form($form, $form_state, $path, $origin) {
+function acb_layout_form($form, &$form_state, $path, $origin) {
 
   $list_themes = list_themes();
   $list_themes = acb_get_enabled_themes($list_themes);
   $theme_regions = acb_get_regions($list_themes);
-
-  $form['#tree'] = TRUE;
+  
+	$form_state['storage']['theme_regions'] = $theme_regions;
+	
+	$form['#tree'] = TRUE;
 
   $form['url'] = [
     '#type' => 'textfield',
@@ -86,7 +88,7 @@ function acb_layout_form($form, $form_state, $path, $origin) {
 
     }
   }
-
+  
   $form['submit'] = array('#type' => 'submit', '#value' => t('Save'));
 
   return $form;
@@ -106,6 +108,6 @@ function acb_layout_form_add_item($form, &$form_state) {
 }
 
 function acb_layout_form_submit($form, &$form_state) {
-  
-  $values = $form_state['values'];
+	
+	$values = $form_state['values'];
 }
