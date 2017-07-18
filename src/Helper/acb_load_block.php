@@ -26,7 +26,6 @@ function acb_load_block ($string = "") {
  * @return array
  */
 function acb_get_enabled_themes(array $list){
-
     $cache = cache_get('acb_enabled_themes');
     if (isset($cache->data)) {
       $data = $cache->data;
@@ -39,7 +38,6 @@ function acb_get_enabled_themes(array $list){
       });
       cache_set('acb_enabled_themes', $data);
     }
-
   return $data;
 }
 
@@ -49,8 +47,6 @@ function acb_get_enabled_themes(array $list){
  * @return array
  */
 function acb_get_regions(array $list_theme){
-
-
     $cache = cache_get('acb_theme_regions');
     if (isset($cache->data)) {
       $data = $cache->data;
@@ -61,10 +57,10 @@ function acb_get_regions(array $list_theme){
       }, $list_theme);
       cache_set('acb_theme_regions', $data);
     }
-
   return $data;
 }
 
 function acb_clean_submited_values(array $values) {
+
 
 }
