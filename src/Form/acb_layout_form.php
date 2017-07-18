@@ -5,10 +5,9 @@
  */
 
 function acb_layout_form($form, &$form_state, $path, $origin) {
-
-  $list_themes = list_themes();
-  $list_themes = acb_get_enabled_themes($list_themes);
-  $theme_regions = acb_get_regions($list_themes);
+	
+  $enabled_themes = acb_get_enabled_themes(list_themes());
+  $theme_regions = acb_get_regions($enabled_themes);
   
 	$form_state['storage']['theme_regions'] = $theme_regions;
 	
