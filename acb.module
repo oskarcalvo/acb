@@ -1,5 +1,6 @@
 <?php
-use Drupal\acb\Helper\AcbHelper;
+module_load_include('php', 'acb', 'src/Form/acb_layout_form');
+
 /**
  * @file acb.module 
  */
