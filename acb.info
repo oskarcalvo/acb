@@ -2,4 +2,5 @@ name = Alternativa Configuration for blocks
 description = You can configure where do you want to print your blocks by paths
 core = 7.x
 dependencies[] = block
+dependencies[] = xautoload
 files[] = src/Form/acb_layout_form.php
