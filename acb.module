@@ -43,7 +43,7 @@ function acb_menu() {
     'page arguments' => array('node',1),
     'access arguments' => array('administer acb layout'),
     'type' => MENU_LOCAL_TASK,
-    'file' => 'src/Helper/acb_page.inc'
+    'file' => 'acb_page.inc'
   ];
 
   $items['admin/structure/acb'] = [
