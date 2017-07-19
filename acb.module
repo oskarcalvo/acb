@@ -1,5 +1,5 @@
 <?php
-
+use Drupal\acb\Helper\AcbHelper;
 /**
  * @file acb.module 
  */
@@ -56,8 +56,8 @@ function acb_menu() {
   ];
 
   $items['acb/acb_load_block_autocomplete_callback'] = [
-    'page callback' => 'acb_load_block',
-    'file' =>'src/Helper/acb_load_block.php',
+    'page callback' => '\Drupal\\acb\\Helper\\AcbHelper::load_block',
+    'file' =>'src/Helper/AcbHelper.php',
     'type' => MENU_CALLBACK,
     'access arguments' => array('access content'),
   ];
