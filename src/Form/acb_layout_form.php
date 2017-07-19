@@ -1,13 +1,14 @@
 <?php
 
+use Drupal\acb\Helper\AcbHelper;
 /**
  * @file Form to configure the layout.
  */
 
 function acb_layout_form($form, &$form_state, $path, $origin) {
 	
-  $enabled_themes = acb_get_enabled_themes(list_themes());
-  $theme_regions = acb_get_regions($enabled_themes);
+  
+  $theme_regions = AcbHelper::get_enabled_theme_regions();
   
 	$form_state['storage']['theme_regions'] = $theme_regions;
 	
