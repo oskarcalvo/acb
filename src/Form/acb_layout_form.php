@@ -109,5 +109,9 @@ function acb_layout_form_add_item($form, &$form_state) {
 
 function acb_layout_form_submit($form, &$form_state) {
 	
-	$values = $form_state['values'];
+	unset($form_state['values']['theme']['theme__active_tab']);
+	$results = AcbHelper::clean_submited_values(
+		$form_state['values']['theme'],
+		$form_state['storage']['theme_regions']
+	);
 }
