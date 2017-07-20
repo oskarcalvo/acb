@@ -78,12 +78,41 @@ Class AcbHelper {
 		return $data;
 	}
 	
-
-	
-	
-	function clean_submited_values(array $values) {
-	
-	
+	/**
+	 * @param array $themes
+	 * @param array $maps
+	 *
+	 * @return array
+	 */
+	static function clean_submited_values(array $themes, array $maps) {
+		foreach ($maps as $theme => $regions) {
+			foreach ($regions as $machine_name => $region) {
+				//unset the add_item element.
+				if (isset($themes[$theme][$machine_name]['add_item'])) {
+					unset($themes[$theme][$machine_name]['add_item']);
+				}
+				
+				//clean the empty and rebuild the result only to the bid.
+				foreach ($themes[$theme][$machine_name] as $key => $result){
+					if(empty($themes[$theme][$machine_name][$key]['block'])) {
+						unset($themes[$theme][$machine_name][$key]['block']);
+					}else {
+						$themes[$theme][$machine_name][$key]['block'] =
+							self::clean_result_string($themes[$theme][$machine_name][$key]['block']);
+					}
+				}
+			}
+		}
+		return $themes;
 	}
 	
+	/**
+	 * @param $string
+	 * example of who the string will be: text[25]
+	 *
+	 * @return bool|string
+	 */
+	private static function clean_result_string($string) {
+		return substr(explode('[',	$string)[1],0,-1);
+	}
 }
