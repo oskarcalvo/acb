@@ -85,6 +85,7 @@ Class AcbHelper {
 	 * @return array
 	 */
 	static function clean_submited_values(array $themes, array $maps) {
+		//TODO: check the code and look for a better way
 		foreach ($maps as $theme => $regions) {
 			foreach ($regions as $machine_name => $region) {
 				//unset the add_item element.
