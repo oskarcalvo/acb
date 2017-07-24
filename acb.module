@@ -36,8 +36,7 @@ function acb_permission() {
  */
 function acb_menu() {
   $items = [];
-
-
+	
   $items['node/%node/block_layout'] = [
     'title' => 'Block layout',
     'page callback' => 'acb_node_configure_block',
