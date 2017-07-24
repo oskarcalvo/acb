@@ -1,5 +1,7 @@
 <?php
 
+namespace Drupal\acb\Model;
+
 use Drupal\acb\Model\AcbModelInterface;
 
 
@@ -9,16 +11,37 @@ class AcbModelClass implements AcbModelInterface {
 	
 	/**
 	 * @param $id
+	 *
+	 * @return mixed
 	 */
 	public function load_by_id($id){
-	
+		return $this->load_data_filtered_by_field('acbid',$id,'=');
 	}
 	
 	/**
 	 * @param $url
+	 *
+	 * @return mixed
 	 */
 	public function load_by_url($url){
+		return $this->load_data_filtered_by_field('url',$url,'LIKE');
+	}
 	
+	/**
+	 * @param $field
+	 * @param $value
+	 * @param $operator
+	 *
+	 * @return mixed
+	 */
+	private function load_data_filtered_by_field($field, $value, $operator) {
+		$query = db_select(self::DDBBTABLE, 'acb')
+			->condition($field,$value, $operator)
+			->fields('acb', array('acbid','url','data'));
+		$query->addTag('acb_load');
+		$result= $query->execute();
+	  $records = $result->fetchAll();
+		return $records;
 	}
 	
 	/**
