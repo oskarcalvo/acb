@@ -1,12 +1,20 @@
 <?php
 
 use Drupal\acb\Helper\AcbHelper;
+use Drupal\acb\Model\AcbModelClass;
 /**
  * @file Form to configure the layout.
  */
 
-function acb_layout_form($form, &$form_state, $path, $origin) {
-	
+/**
+ * @param array  $form
+ * @param array  $form_state
+ * @param string  $path
+ * @param object  $acb
+ *
+ * @return mixed
+ */
+function acb_layout_form($form, &$form_state, $path, $acb_record) {
   
   $theme_regions = AcbHelper::get_enabled_theme_regions();
   
@@ -23,6 +31,16 @@ function acb_layout_form($form, &$form_state, $path, $origin) {
     '#required' => TRUE,
     '#element_validate' => ['_acb_validate_url'],
   ];
+  
+  $form['acb_id'] = [
+		'#type' => 'hidden',
+		'#title' => t('id'),
+		'#default_value' => '',
+		'#size' => 60,
+		'#maxlength' => 128,
+		'#required' => TRUE,
+		'#disabled' =>  TRUE,
+	];
 
   if(isset($origin) && $origin && isset($path) && $path) {
     unset($form['url']['#required']);
