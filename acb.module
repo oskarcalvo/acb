@@ -1,6 +1,7 @@
 <?php
 module_load_include('php', 'acb', 'src/Form/acb_layout_form');
-
+module_load_include('php', 'acb', 'src/Form/acb_settings_form');
+module_load_include('php', 'acb', 'src/Helper/AcbLoadBlock');
 /**
  * @file acb.module 
  */
@@ -47,13 +48,22 @@ function acb_menu() {
   ];
 
   $items['admin/structure/acb'] = [
-    'title' => 'Alternative block layout',
+    'title' => t('Alternative block layout'),
     'page callback' => 'drupal_get_form',
     'page arguments' => ['acb_layout_form'],
     'access arguments' => ['administer acb layout'],
     'type' => MENU_NORMAL_ITEM,
     'file' => 'src/Form/acb_layout_form.php'
   ];
+	
+	$items['admin/structure/acb/settings'] = [
+		'title' => t('Configure ACB settings'),
+		'page callback' => 'drupal_get_form',
+		'page arguments' => ['acb_settings_form'],
+		'access arguments' => ['administer acb layout'],
+		'type' => MENU_NORMAL_ITEM,
+		'file' => 'src/Form/acb_settings_form.php',
+	];
 
   $items['acb/acb_load_block_autocomplete_callback'] = [
     'page callback' => '\Drupal\\acb\\Helper\\AcbHelper::load_block',
