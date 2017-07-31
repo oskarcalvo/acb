@@ -14,7 +14,8 @@ use Drupal\acb\Model\AcbModelClass;
  *
  * @return mixed
  */
-function acb_layout_form($form, &$form_state, $path, $acb_record) {
+function acb_layout_form($form, &$form_state, $path = NULL, $acb_record =
+NULL) {
   
   $theme_regions = AcbHelper::get_enabled_theme_regions();
   
