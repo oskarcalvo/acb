@@ -4,3 +4,5 @@ core = 7.x
 dependencies[] = block
 dependencies[] = xautoload
 files[] = src/Form/acb_layout_form.php
+files[] = src/Form/acb_settings_form.php
+files[] = src/*/*.php
