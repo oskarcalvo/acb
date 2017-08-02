@@ -116,4 +116,16 @@ Class AcbHelper {
 	private static function clean_result_string($string) {
 		return substr(explode('[',	$string)[1],0,-1);
 	}
+	
+	/**
+	 * Clean arrays with keys and empty values.
+	 * @param array $array
+	 *
+	 * @return array
+	 */
+	static public function clean_array(array $array) {
+		return array_filter($array, function ($item) {
+			return empty($item) ? FALSE : TRUE;
+		}, ARRAY_FILTER_USE_BOTH);
+	}
 }
