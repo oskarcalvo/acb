@@ -32,4 +32,16 @@ class AcbLoadBlock {
 		
 		return $modules;
 	}
+	
+	public static function selected_modules() {
+		$list_of_modules = variable_get('acb_list_modules', NULL);
+	}
+	
+	public static function get_blocks($string) {
+		//get list of modules enabled.
+		
+		// Load all the blocks availables in those modules
+		
+		// filter by search string
+	}
 }
