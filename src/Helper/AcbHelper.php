@@ -1,6 +1,6 @@
 <?php
 
-namespace drupal\acb\Helper;
+namespace Drupal\acb\Helper;
 
 
 Class AcbHelper {
