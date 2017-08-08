@@ -95,11 +95,10 @@ Class AcbHelper {
 				
 				//clean the empty and rebuild the result only to the bid.
 				foreach ($themes[$theme][$machine_name] as $key => $result){
-					if(empty($themes[$theme][$machine_name][$key]['block'])) {
-						unset($themes[$theme][$machine_name][$key]['block']);
+					if(empty($themes[$theme][$machine_name][$key])) {
+						unset($themes[$theme][$machine_name][$key]);
 					}else {
-						$themes[$theme][$machine_name][$key]['block'] =
-							self::clean_result_string($themes[$theme][$machine_name][$key]['block']);
+						$themes[$theme][$machine_name][$key] = $themes[$theme][$machine_name][$key];
 					}
 				}
 			}
