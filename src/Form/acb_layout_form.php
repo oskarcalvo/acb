@@ -14,29 +14,29 @@ use Drupal\acb\Model\AcbModelClass;
  *
  * @return mixed
  */
-function acb_layout_form($form, &$form_state, $path = NULL, $acb_record =
-NULL) {
+function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) {
   
   $theme_regions = AcbHelper::get_enabled_theme_regions();
   
 	$form_state['storage']['theme_regions'] = $theme_regions;
-	
 	$form['#tree'] = TRUE;
 
+	$url = isset($path)? $path : '';
   $form['url'] = [
     '#type' => 'textfield',
     '#title' => t('Url'),
-    '#default_value' => '',
+    '#default_value' => $url,
     '#size' => 60,
     '#maxlength' => 128,
     '#required' => TRUE,
     '#element_validate' => ['_acb_validate_url'],
   ];
   
-  $form['acb_id'] = [
+  $acbid = (isset($acb_record) && isset($acb_record->acbid)) ? $acb_record->acbid : '';
+  $form['acbid'] = [
 		'#type' => 'hidden',
 		'#title' => t('id'),
-		'#default_value' => '',
+		'#default_value' => $acbid,
 		'#size' => 60,
 		'#maxlength' => 128,
 		'#required' => TRUE,
@@ -86,7 +86,8 @@ NULL) {
       ];
 
       for($i = 1; $i <= $form_state['block_number'][$theme_name][$machine_name]; $i++) {
-        $form['theme'][$theme_name][$machine_name][$i]['block'] = [
+      	
+        $form['theme'][$theme_name][$machine_name][$i] = [
           '#type' => 'textfield',
           '#title' => t('Block'),
           '#autocomplete_path' => 'acb/acb_load_block_autocomplete_callback'
@@ -133,4 +134,26 @@ function acb_layout_form_submit($form, &$form_state) {
 		$form_state['values']['theme'],
 		$form_state['storage']['theme_regions']
 	);
+	$new_record = new AcbModelClass();
+	if(isset($form_state['values']['acbid']) && ($form_state['values']['acb_id']) ){
+		$new_record->update(
+			$form_state['values']['url'],
+			$form_state['values']['theme'],
+			$form_state['values']['acbid']
+		);
+	}else {
+		$new_record->save(
+			$form_state['values']['url'],
+			$form_state['values']['theme']
+		);
+	}
+	
+}
+
+/**
+ * @param array $url
+ * @return bool
+ */
+function _acb_validate_url($url) {
+	return (url_is_external($url['#value']) === TRUE) ?  FALSE : TRUE;
 }
