@@ -11,8 +11,8 @@ function acb_node_configure_block($type, $object) {
   $acb = new AcbModelClass();
   $acb_record = $acb->load_by_url($path);
   if(isset($acb_record->acbid)) {
-		$json_data = preg_replace('/\s+/', '',$acb_record->data);
-		$decode_data = json_decode($json_data, TRUE);
+	  $acb_record->data = unserialize($acb_record->data);
 	}
+
   return drupal_get_form('acb_layout_form',$path, $acb_record);
 }
