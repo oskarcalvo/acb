@@ -57,7 +57,7 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
     '#title' => t('Configure layout'),
   ];
 
-
+	$blocks = $acb_record->data;
   foreach ($theme_regions as $theme_name => $regions) {
 
     $form['theme'][$theme_name] = [
@@ -66,16 +66,32 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     ];
-
+	
     foreach ($regions as $machine_name => $human_name) {
-
-      if(empty($form_state['block_number'][$theme_name][$machine_name])){
-        $form_state['block_number'][$theme_name][$machine_name] = 1;
+	
+	    $quantity_blocks = count($blocks[$theme_name][$machine_name]);
+	    
+      if( $quantity_blocks == 0 &&
+      	 empty( $form_state['block_number'][$theme_name][$machine_name])) {
+	      $form_state['block_number'][$theme_name][$machine_name] = 1;
       }
+        
+      if( $quantity_blocks >= 1 &&
+	      isset( $form_state['block_number'][$theme_name][$machine_name]) &&
+	      $quantity_blocks >=  $form_state['block_number'][$theme_name][$machine_name]
+      ) {
+	      $form_state['block_number'][$theme_name][$machine_name] =  $quantity_blocks;
+      }
+      
+      if( $quantity_blocks >= 1 &&
+      !isset( $form_state['block_number'][$theme_name][$machine_name])
+      ){
+	      $form_state['block_number'][$theme_name][$machine_name] =  $quantity_blocks;
+      }
+      
+      
 
-
-      $collapsed = ($form_state['block_number'][$theme_name][$machine_name] >
-        1) ? FALSE : TRUE;
+      $collapsed = ( $form_state['block_number'][$theme_name][$machine_name] > 1) ? FALSE : TRUE;
 
       $form['theme'][$theme_name][$machine_name] = [
         '#type' => 'fieldset',
@@ -85,12 +101,15 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
         '#description' => t('Set the blocks for this region.'),
       ];
 
-      for($i = 1; $i <= $form_state['block_number'][$theme_name][$machine_name]; $i++) {
+      for($i = 1; $i <=  $form_state['block_number'][$theme_name][$machine_name]; $i++) {
       	
         $form['theme'][$theme_name][$machine_name][$i] = [
           '#type' => 'textfield',
           '#title' => t('Block'),
-          '#autocomplete_path' => 'acb/acb_load_block_autocomplete_callback'
+	        '#default_value' => isset($blocks[$theme_name][$machine_name][$i])
+		        ? $blocks[$theme_name][$machine_name][$i] : '',
+          '#autocomplete_path' => 'acb/acb_load_block_autocomplete_callback',
+	        
         ];
       }
 
@@ -139,14 +158,14 @@ function acb_layout_form_submit($form, &$form_state) {
 		//update a record
 		$new_record->update(
 			$form_state['values']['url'],
-			$form_state['values']['theme'],
+			$results,
 			$form_state['values']['acbid']
 		);
 	}else {
 		// save new record
 		$new_record->save(
 			$form_state['values']['url'],
-			$form_state['values']['theme']
+			$results
 		);
 	}
 	
