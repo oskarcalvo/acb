@@ -74,8 +74,8 @@ class AcbModelClass implements AcbModelInterface {
 		$record = new stdClass();
 		$record->url = $url;
 		$record->data = serialize($data);
-		$record->id = $id;
-		return drupal_write_record(self::DDBBTABLE, $record, [$id]);
+		$record->acbid = $id;
+		return drupal_write_record(self::DDBBTABLE, $record, ['acbid']);
 	}
 	
 	/**
