@@ -43,12 +43,12 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
 		'#disabled' =>  TRUE,
 	];
 
-  if(isset($origin) && $origin && isset($path) && $path) {
+  if(isset($url) ) {
     unset($form['url']['#required']);
     unset($form['url']['#element_validate']);
-    $form['url']['#default_value'] = $path;
+    $form['url']['#default_value'] = $url;
     $form['url']['#disabled'] =  TRUE;
-    $form['url']['#type'] = 'hidden';
+    // $form['url']['#type'] = 'hidden';
   }
 
 
@@ -135,13 +135,15 @@ function acb_layout_form_submit($form, &$form_state) {
 		$form_state['storage']['theme_regions']
 	);
 	$new_record = new AcbModelClass();
-	if(isset($form_state['values']['acbid']) && ($form_state['values']['acb_id']) ){
+	if(isset($form_state['values']['acbid']) && ($form_state['values']['acbid']) ){
+		//update a record
 		$new_record->update(
 			$form_state['values']['url'],
 			$form_state['values']['theme'],
 			$form_state['values']['acbid']
 		);
 	}else {
+		// save new record
 		$new_record->save(
 			$form_state['values']['url'],
 			$form_state['values']['theme']
