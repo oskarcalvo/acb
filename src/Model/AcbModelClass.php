@@ -3,7 +3,7 @@
 namespace Drupal\acb\Model;
 
 use Drupal\acb\Model\AcbModelInterface;
-
+use stdClass;
 
 class AcbModelClass implements AcbModelInterface {
 	
@@ -24,7 +24,11 @@ class AcbModelClass implements AcbModelInterface {
 	 * @return mixed
 	 */
 	public function load_by_url($url){
-		return $this->load_data_filtered_by_field('url',$url,'LIKE');
+		$result =  $this->load_data_filtered_by_field('url',$url,'LIKE');
+		if(count($result) === 1){
+			return $result[0];
+		}
+		return FALSE;
 	}
 	
 	/**
@@ -55,8 +59,7 @@ class AcbModelClass implements AcbModelInterface {
 		$record = new stdClass();
 		$record->url = $url;
 		$record->data = serialize($data);
-		
-		return drupal_write_record(DDBBTABLE, $record);
+		return drupal_write_record(self::DDBBTABLE, $record);
 	}
 	
 	/**
@@ -66,14 +69,13 @@ class AcbModelClass implements AcbModelInterface {
 	 *
 	 * @return bool|int
 	 */
-	public function update($id, $url, array $data){
+	public function update($url, array $data, $id){
 		
 		$record = new stdClass();
 		$record->url = $url;
 		$record->data = serialize($data);
 		$record->id = $id;
-		
-		return drupal_write_record(DDBBTABLE, $record, [$id]);
+		return drupal_write_record(self::DDBBTABLE, $record, [$id]);
 	}
 	
 	/**
@@ -81,6 +83,19 @@ class AcbModelClass implements AcbModelInterface {
 	 */
 	public function delete($id){
 	
+	}
+	
+	public static function url_exist($url) {
+		$query = db_select(self::DDBBTABLE, 'acb')
+			->condition('url', $url, '=')
+			->fields('acb',['acbid']);
+		$query->addTag('acb_url_exist');
+		$result =  $query->execute();
+		$records = $result->fetchAllAssoc('acbid');
+		foreach ($records as $record){
+			$output = $record->acbid;
+		}
+		return $output;
 	}
 	
 }
