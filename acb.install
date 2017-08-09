@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Install, update, and uninstall functions for the Foo Acb module.
+ */
+
 function acb_schema() {
   $schema['acb_layout'] = [
     'description' => t('Stores the layout configurations'),
