@@ -37,7 +37,7 @@ function acb_permission() {
  */
 function acb_menu() {
   $items = [];
-	
+  
   $items['node/%node/block_layout'] = [
     'title' => 'Block layout',
     'page callback' => 'acb_node_configure_block',
@@ -48,32 +48,32 @@ function acb_menu() {
   ];
 
   $items['admin/structure/acb'] = [
-		'title' => t('Configure ACB settings'),
-		'page callback' => 'drupal_get_form',
-		'page arguments' => ['acb_settings_form'],
-		'access arguments' => ['administer acb layout'],
-		'type' => MENU_NORMAL_ITEM,
-		'file' => 'src/Form/acb_settings_form.php',
+    'title' => t('Configure ACB settings'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['acb_settings_form'],
+    'access arguments' => ['administer acb layout'],
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'src/Form/acb_settings_form.php',
   ];
-	
-	$items['admin/structure/acb/settings'] = [
-		'title' => t('Configure ACB settings'),
-		'page callback' => 'drupal_get_form',
-		'page arguments' => ['acb_settings_form'],
-		'access arguments' => ['administer acb layout'],
-		'type' => MENU_DEFAULT_LOCAL_TASK,
-		'file' => 'src/Form/acb_settings_form.php',
-	];
-	
-	$items['admin/structure/acb/add'] = [
-		'title' => t('Alternative block layout'),
-		'page callback' => 'drupal_get_form',
-		'page arguments' => ['acb_layout_form'],
-		'access arguments' => ['administer acb layout'],
-		'type' => MENU_LOCAL_TASK,
-		'file' => 'src/Form/acb_layout_form.php'
-	];
-	
+  
+  $items['admin/structure/acb/settings'] = [
+    'title' => t('Configure ACB settings'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['acb_settings_form'],
+    'access arguments' => ['administer acb layout'],
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'file' => 'src/Form/acb_settings_form.php',
+  ];
+  
+  $items['admin/structure/acb/add'] = [
+    'title' => t('Alternative block layout'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['acb_layout_form'],
+    'access arguments' => ['administer acb layout'],
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'src/Form/acb_layout_form.php'
+  ];
+  
   $items['acb/acb_load_block_autocomplete_callback'] = [
     'page callback' => '\Drupal\\acb\\Helper\\AcbLoadBlock::get_blocks',
     'file' =>'src/Helper/AcbHelper.php',
@@ -92,8 +92,8 @@ https://api.drupal.org/api/drupal/modules!block!block.api.php/function/hook_bloc
  * Implements hook_admin_paths().
  */
 function acb_admin_paths() {
-	$paths = [
-		'node/*/block_layout' => TRUE
-	];
-	return $paths;
+  $paths = [
+    'node/*/block_layout' => TRUE
+  ];
+  return $paths;
 }
