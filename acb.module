@@ -86,3 +86,14 @@ function acb_menu() {
 /*
 https://api.drupal.org/api/drupal/modules!block!block.api.php/function/hook_block_list_alter/7.x
 */
+
+
+/**
+ * Implements hook_admin_paths().
+ */
+function acb_admin_paths() {
+	$paths = [
+		'node/*/block_layout' => TRUE
+	];
+	return $paths;
+}
