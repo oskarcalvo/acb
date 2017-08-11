@@ -38,7 +38,8 @@ class AcbModelClass implements AcbModelInterface {
 	 *
 	 * @return mixed
 	 */
-	private function load_data_filtered_by_field($field, $value, $operator) {
+	static private function load_data_filtered_by_field($field, $value,
+                                                     $operator) {
 		$query = db_select(self::DDBBTABLE, 'acb')
 			->condition($field,$value, $operator)
 			->fields('acb', array('acbid','url','data'));
