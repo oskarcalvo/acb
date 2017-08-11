@@ -6,6 +6,8 @@ module_load_include('php', 'acb', 'src/Helper/AcbLoadBlock');
  * @file acb.module 
  */
 
+use Drupal\acb\Model\AcbModelClass;
+use Drupal\acb\Helper\AcbHelper;
 
 /**
  * Implements hook_help().
@@ -97,3 +99,27 @@ function acb_admin_paths() {
   ];
   return $paths;
 }
+
+
+/**
+ * Implements hook_page_alter().
+ */
+function acb_page_alter(&$page) {
+  global $theme;
+  $object = menu_get_object();
+  
+  if (isset($object->type) && isset($object->nid)) {
+    $blocks_by_url = new AcbModelClass;
+    $blocks = $blocks_by_url->load_by_url('node/'.$object->nid);
+    if(is_object($blocks) && isset($blocks->data)) {
+      $raw_blocks = unserialize($blocks->data);
+      $blocks_pre_build = AcbHelper::clean_array($raw_blocks[$theme]);
+      $wadus = [];
+      foreach ($blocks_pre_build as $region => $blocks) {
+        $wadus[$region] = AcbHelper::get_renderized_block($blocks, $region, $theme);
+      }
+    }
+  }
+}
+
+
