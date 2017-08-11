@@ -1,29 +1,20 @@
 <?php
 
 namespace Drupal\acb\Helper;
-
+use Drupal\acb\Model\AcbBlockModelClass;
 
 Class AcbHelper {
 	
-	
-	/**
-	 * @Autocomplete
-	 */
-	
-	function load_block ($string = '') {
-		$matches = [];
-		if($string) {
-			$result = db_select('block')
-				->fields('block', ['bid','title'])
-				->condition('title',db_like($string).'%', 'LIKE')
-				->range(0,10)
-				->execute();
-			foreach ($result as $object) {
-				$matches[$object->title . "[$object->bid]"] = check_plain
-				($object->title);
-			}
-		}
-		drupal_json_output($matches);
+
+	static function get_renderized_block (array $blocks, $region, $theme) {
+	  //limpiamos el nombre de los bloques
+    foreach ($blocks as $block) {
+      $block_delta[] = rtrim(explode(':', $block)[1],']');
+    }
+    //$block_delta = implode(',',$block_delta);
+    $blocks = AcbBlockModelClass::get_block_filter_by_delta_theme  ($block_delta,$theme);
+    $WADUS = '';
+  
 	}
 	
 	/**
@@ -127,4 +118,5 @@ Class AcbHelper {
 			return empty($item) ? FALSE : TRUE;
 		}, ARRAY_FILTER_USE_BOTH);
 	}
+ 
 }
