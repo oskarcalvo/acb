@@ -56,7 +56,7 @@ class AcbBlockModelClass {
       ->condition('b.theme', $theme, 'LIKE')
       ->fields('b',['bid','module','delta','theme','status',
         'weight','region','custom','visibility','pages','title','cache','i18n_mode']);
-    $blocks = $query->execute()-fetchAll();
+    $blocks = $query->execute()->fetchAll();
     return $blocks;
   }
 }
