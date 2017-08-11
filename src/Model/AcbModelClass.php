@@ -14,8 +14,8 @@ class AcbModelClass implements AcbModelInterface {
 	 *
 	 * @return mixed
 	 */
-	public function load_by_id($id){
-		return $this->load_data_filtered_by_field('acbid',$id,'=');
+	static public function load_by_id($id){
+		return self::load_data_filtered_by_field('acbid',$id,'=');
 	}
 	
 	/**
@@ -23,8 +23,8 @@ class AcbModelClass implements AcbModelInterface {
 	 *
 	 * @return mixed
 	 */
-	public function load_by_url($url){
-		$result =  $this->load_data_filtered_by_field('url',$url,'LIKE');
+	static function load_by_url($url){
+		$result =  self::load_data_filtered_by_field('url',$url,'LIKE');
 		if(count($result) === 1){
 			return $result[0];
 		}
@@ -54,7 +54,7 @@ class AcbModelClass implements AcbModelInterface {
 	 *
 	 * @return bool|int
 	 */
-	public function save($url, array $data){
+	static public function save($url, array $data){
 		
 		$record = new stdClass();
 		$record->url = $url;
@@ -69,7 +69,7 @@ class AcbModelClass implements AcbModelInterface {
 	 *
 	 * @return bool|int
 	 */
-	public function update($url, array $data, $id){
+	static public function update($url, array $data, $id){
 		
 		$record = new stdClass();
 		$record->url = $url;
@@ -81,7 +81,7 @@ class AcbModelClass implements AcbModelInterface {
 	/**
 	 * @param $id
 	 */
-	public function delete($id){
+	static public function delete($id){
 	
 	}
 	
