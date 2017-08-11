@@ -43,4 +43,20 @@ class AcbBlockModelClass {
     
     return $blocks;
   }
+  
+  /**
+   * @param string $delta
+   * @param string $theme
+   *
+   * @return mixed
+   */
+  static function get_block_filter_by_delta_theme($delta, $theme) {
+    $query = db_select('block', 'b')
+      ->condition('b.delta', $delta, 'IN')
+      ->condition('b.theme', $theme, 'LIKE')
+      ->fields('b',['bid','module','delta','theme','status',
+        'weight','region','custom','visibility','pages','title','cache','i18n_mode']);
+    $blocks = $query->execute()-fetchAll();
+    return $blocks;
+  }
 }
