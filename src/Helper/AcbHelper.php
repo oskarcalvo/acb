@@ -7,14 +7,26 @@ Class AcbHelper {
 	
 
 	static function get_renderized_block (array $blocks, $region, $theme) {
-	  //limpiamos el nombre de los bloques
+    $build = [];
+    $prepared_blocks = [];
+    
+    
     foreach ($blocks as $block) {
       $block_delta[] = rtrim(explode(':', $block)[1],']');
     }
-    //$block_delta = implode(',',$block_delta);
+    
     $blocks = AcbBlockModelClass::get_block_filter_by_delta_theme  ($block_delta,$theme);
-    $WADUS = '';
-  
+    
+    foreach ($blocks as $key => $block) {
+      $block->status = 1;
+      $block->region = $region;
+      $prepared_blocks[$block->module.'_'.$block->delta] = $block;
+    }
+    
+    module_load_include('module', 'block', 'block');
+    $build = _block_get_renderable_array($prepared_blocks);
+    
+    return $build;
 	}
 	
 	/**
