@@ -15,18 +15,36 @@ Class AcbHelper {
       $block_delta[] = rtrim(explode(':', $block)[1],']');
     }
     
-    $blocks = AcbBlockModelClass::get_block_filter_by_delta_theme  ($block_delta,$theme);
+    $blocks_info = AcbBlockModelClass::get_block_filter_by_delta_theme($block_delta,$theme);
     
-    foreach ($blocks as $key => $block) {
-      $block->status = 1;
+    array_map(function($block)use ($region){
+      $block->status = "1";
       $block->region = $region;
-      $prepared_blocks[$block->module.'_'.$block->delta] = $block;
+    },$blocks_info);
+    
+    drupal_alter('block_list', $blocks_info);
+    $wadus = '';
+    /*
+    $blocks = [];
+    foreach ($blocks_info as $block) {
+      $blocks[$block->region]["{$block->module}_{$block->delta}"] = $block;
     }
+    */
+    foreach ($blocks_info as $key => $block) {
+      $wadus = '';
+      $rendered[] = module_invoke($block->module,'block_view', $block->delta);
+      
+    }
+    $wadus = '';
     
-    module_load_include('module', 'block', 'block');
-    $build = _block_get_renderable_array($prepared_blocks);
     
-    return $build;
+    /*
+    array_map(function($block){
+      module_invoke('views', 'block_view', );
+    }, $blocks_info);
+    */
+    
+    return $blocks;
 	}
 	
 	/**
