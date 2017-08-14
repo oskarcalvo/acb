@@ -23,28 +23,11 @@ Class AcbHelper {
     },$blocks_info);
     
     drupal_alter('block_list', $blocks_info);
-    $wadus = '';
-    /*
-    $blocks = [];
-    foreach ($blocks_info as $block) {
-      $blocks[$block->region]["{$block->module}_{$block->delta}"] = $block;
     }
-    */
-    foreach ($blocks_info as $key => $block) {
-      $wadus = '';
-      $rendered[] = module_invoke($block->module,'block_view', $block->delta);
-      
-    }
-    $wadus = '';
     
+    //render the blocks?
     
-    /*
-    array_map(function($block){
-      module_invoke('views', 'block_view', );
-    }, $blocks_info);
-    */
-    
-    return $blocks;
+  
 	}
 	
 	/**
