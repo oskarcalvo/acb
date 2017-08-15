@@ -121,8 +121,9 @@ function acb_page_alter(&$page) {
         
         $wadus = [];
         foreach ($blocks_pre_build as $region => $blocks) {
-      
-          $wadus[$region] = AcbHelper::get_renderized_block($blocks, $region, $theme);
+      		unset($page[$region]);
+          $blocks = AcbHelper::get_renderized_block($blocks, $region, $theme);
+          $page[$region] = $blocks;
       
         }
       }
