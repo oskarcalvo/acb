@@ -6,7 +6,7 @@ use Drupal\acb\Model\AcbBlockModelClass;
 Class AcbHelper {
 	
 
-	static function get_renderized_block (array $blocks, $region, $theme) {
+	public static function get_renderized_block (array $blocks, $region, $theme) {
     $build = [];
     $prepared_blocks = [];
     
@@ -23,17 +23,21 @@ Class AcbHelper {
     },$blocks_info);
     
     drupal_alter('block_list', $blocks_info);
-    }
-    
-    //render the blocks?
-    
+   
+    foreach ($blocks_info as $pre_render) {
+    	$bid = $pre_render->module . '_' . $pre_render->delta;
+    	$block_content = _block_render_blocks([$pre_render]);
+			$rendered_block[$bid] = _block_get_renderable_array($block_content);
+		}
+		return $rendered_block;
+  
   
 	}
 	
 	/**
 	 * @return array
 	 */
-	static function get_enabled_theme_regions() {
+	public static function get_enabled_theme_regions() {
 		$list_theme = self::get_enabled_themes();
 		$regions = self::get_regions($list_theme);
 		return $regions;
@@ -44,7 +48,7 @@ Class AcbHelper {
 	 *
 	 * @return array
 	 */
-	static function get_enabled_themes(){
+	public static function get_enabled_themes(){
 		$cache = cache_get('acb_enabled_themes');
 		unset($cache->data);
 		if (isset($cache->data)) {
@@ -67,7 +71,7 @@ Class AcbHelper {
 	 *
 	 * @return array
 	 */
-	static function get_regions(array $list_theme){
+	public static function get_regions(array $list_theme){
 		$cache = cache_get('acb_theme_regions');
 		unset($cache->data);
 		if (isset($cache->data)) {
@@ -88,7 +92,7 @@ Class AcbHelper {
 	 *
 	 * @return array
 	 */
-	static function clean_submited_values(array $themes, array $maps) {
+	public static function clean_submited_values(array $themes, array $maps) {
 		//TODO: check the code and look for a better way
 		foreach ($maps as $theme => $regions) {
 			foreach ($regions as $machine_name => $region) {
@@ -126,7 +130,7 @@ Class AcbHelper {
 	 *
 	 * @return array
 	 */
-	static public function clean_array(array $array) {
+	public static function clean_array(array $array) {
 		return array_filter($array, function ($item) {
 			return empty($item) ? FALSE : TRUE;
 		}, ARRAY_FILTER_USE_BOTH);
