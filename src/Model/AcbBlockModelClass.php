@@ -54,8 +54,7 @@ class AcbBlockModelClass {
     $query = db_select('block', 'b')
       ->condition('b.delta', $delta, 'IN')
       ->condition('b.theme', $theme, 'LIKE')
-      ->fields('b',['bid','module','delta','theme','status',
-        'weight','region','custom','visibility','pages','title','cache','i18n_mode']);
+      ->fields('b');
     $blocks = $query->execute()->fetchAllAssoc('bid');
     return $blocks;
   }
