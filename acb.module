@@ -110,20 +110,20 @@ function acb_page_alter(&$page) {
   
   if (isset($object->type) && isset($object->nid)) {
     $blocks_by_url = new AcbModelClass;
-    $blocks = $blocks_by_url->load_by_url('node/'.$object->nid);
+    $url_blocks = $blocks_by_url->load_by_url('node/'.$object->nid);
     
-    if(is_object($blocks) && isset($blocks->data)) {
+    if(is_object($url_blocks) && isset($url_blocks->data)) {
   
-      $raw_blocks = unserialize($blocks->data);
+      $raw_blocks = unserialize($url_blocks->data);
   
       if (isset($raw_blocks[$theme])) {
         $blocks_pre_build = AcbHelper::clean_array($raw_blocks[$theme]);
         
-        $wadus = [];
         foreach ($blocks_pre_build as $region => $blocks) {
       		unset($page[$region]);
           $blocks = AcbHelper::get_renderized_block($blocks, $region, $theme);
-          $page[$region] = $blocks;
+          $order = AcbHelper::order_of_block($raw_blocks[$theme][$region]);
+          $page[$region] = AcbHelper::clean_array(array_replace($order, $blocks));
       
         }
       }

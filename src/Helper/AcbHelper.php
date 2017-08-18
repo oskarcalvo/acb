@@ -33,6 +33,20 @@ Class AcbHelper {
   
   
 	}
+  
+  /**
+   * @param array $blocks
+   *
+   * @return array
+   */
+	static public function order_of_block (array $blocks) {
+	  $return = [];
+	  foreach ($blocks as $key => $value) {
+	    $name = str_replace(':','_', self::clean_result_string($value));
+	    $return[$name] = '';
+    }
+    return $return;
+  }
 	
 	/**
 	 * @return array
