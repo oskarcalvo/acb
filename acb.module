@@ -76,6 +76,15 @@ function acb_menu() {
     'file' => 'src/Form/acb_layout_form.php'
   ];
   
+  $items['admin/structure/acb/%/delete'] = [
+    'title' => t('Delete this option'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['acb_delete_layout'],
+    'access arguments' => ['administer acb layout'],
+    'type' => MENU_CALLBACK,
+    'file' => 'src/Form/acb_delete_layout.php'
+  ];
+  
   $items['acb/acb_load_block_autocomplete_callback'] = [
     'page callback' => '\Drupal\\acb\\Helper\\AcbLoadBlock::get_blocks',
     'file' =>'src/Helper/AcbHelper.php',
