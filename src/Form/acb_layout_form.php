@@ -21,7 +21,7 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
 	$form_state['storage']['theme_regions'] = $theme_regions;
 	$form['#tree'] = TRUE;
 
-	$url = isset($path)? $path : '';
+	$url = isset($path)? $path : NULL;
   $form['url'] = [
     '#type' => 'textfield',
     '#title' => t('Url'),
@@ -57,7 +57,7 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
     '#title' => t('Configure layout'),
   ];
 
-	$blocks = $acb_record->data;
+	$blocks = isset($acb_record->data) ? $acb_record->data : NULL ;
   foreach ($theme_regions as $theme_name => $regions) {
 
     $form['theme'][$theme_name] = [
