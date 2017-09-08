@@ -50,7 +50,8 @@ class AcbModelClass implements AcbModelInterface {
 																		$operator = NULL,
 																		array $fields = NULL,
 																		$pager = NULL,
-																		$order = NULL) {
+																		$order = NULL)
+  {
 		$query = db_select(self::DDBBTABLE, 'acb');
 		if (isset($pager)) {
 			$query->extend('PagerDefault');
@@ -108,9 +109,13 @@ class AcbModelClass implements AcbModelInterface {
 	
 	/**
 	 * @param $id
+   * @return boolean
 	 */
 	static public function delete($id){
-	
+	  $delete = db_delete(self::DDBBTABLE)
+      ->condition('acbid', $id, '=')
+      ->execute();
+	  return $delete;
 	}
 	
 	public static function url_exist($url) {
