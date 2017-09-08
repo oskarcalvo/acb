@@ -80,6 +80,12 @@ Class AcbHelper {
 		return $data;
 	}
 	
+	public static function operations_links($id) {
+		$edit = l(t('Edit'), 'admin/structure/acb/'.$id.'/edit');
+		$delete = l(t('Delete'),'admin/structure/acb/'.$id.'/delete');
+		
+		return $edit .' | ' . $delete;
+	}
 	/**
 	 * @param array $list_theme
 	 *
