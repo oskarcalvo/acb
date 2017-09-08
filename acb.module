@@ -50,20 +50,27 @@ function acb_menu() {
   ];
 
   $items['admin/structure/acb'] = [
-    'title' => t('Configure ACB settings'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => ['acb_settings_form'],
-    'access arguments' => ['administer acb layout'],
+		'title' => t('List of elements'),
+		'description' => t('Acb module options'),
+		'page callback' => 'acb_list_elements',
+		'access arguments' => ['administer acb layout'],
     'type' => MENU_NORMAL_ITEM,
-    'file' => 'src/Form/acb_settings_form.php',
+    'file' => 'acb.admin.inc',
   ];
+	$items['admin/structure/acb/list'] = [
+		'title' => t('Block Layout'),
+		'page callback' => 'acb_list_elements',
+		'access arguments' => ['administer acb layout'],
+		'type' => MENU_DEFAULT_LOCAL_TASK,
+		'file' => 'acb.admin.inc',
+	];
   
   $items['admin/structure/acb/settings'] = [
     'title' => t('Configure ACB settings'),
     'page callback' => 'drupal_get_form',
     'page arguments' => ['acb_settings_form'],
     'access arguments' => ['administer acb layout'],
-    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'type' => MENU_LOCAL_TASK,
     'file' => 'src/Form/acb_settings_form.php',
   ];
   
