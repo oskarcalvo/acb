@@ -28,8 +28,11 @@ function acb_delete_layout_submit($form, &$form_state) {
   
   if ($form_state['values']['op'] === 'Delete' && is_numeric($form_state['storage']['acbid'])) {
     $delete = AcbModelClass::delete((int) $form_state['storage']['acbid']);
+    if ($delete === '1') {
+      drupal_set_message(t('The record has been deleted'));
+      $form_state['redirect'] = 'admin/structure/acb';
+    }
   }
-
 }
 
 
