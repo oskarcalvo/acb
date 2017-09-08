@@ -50,7 +50,7 @@ function acb_menu() {
   ];
 
   $items['admin/structure/acb'] = [
-		'title' => t('List of elements'),
+		'title' => t('Acb block layout'),
 		'description' => t('Acb module options'),
 		'page callback' => 'acb_list_elements',
 		'access arguments' => ['administer acb layout'],
