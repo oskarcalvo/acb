@@ -15,7 +15,7 @@ class AcbModelClass implements AcbModelInterface {
 	 * @return mixed
 	 */
 	static public function load_by_id($id){
-		return self::load_data_filtered_by_field('acbid',$id,'=');
+		return self::load_data('acbid',$id,'=');
 	}
 	
 	/**
@@ -24,7 +24,7 @@ class AcbModelClass implements AcbModelInterface {
 	 * @return mixed
 	 */
 	static function load_by_url($url){
-		$result =  self::load_data_filtered_by_field('url',$url,'LIKE');
+		$result =  self::load_data('url',$url,'LIKE');
 		if(count($result) === 1){
 			return $result[0];
 		}
@@ -32,18 +32,45 @@ class AcbModelClass implements AcbModelInterface {
 	}
 	
 	/**
+	 * @return array
+	 */
+	static function list_of_items() {
+		$result = self::load_data(NULL,NULL,NULL,['acbid','url']);
+		return $result;
+	}
+	/**
 	 * @param $field
 	 * @param $value
 	 * @param $operator
 	 *
 	 * @return mixed
 	 */
-	static private function load_data_filtered_by_field($field, $value,
-                                                     $operator) {
-		$query = db_select(self::DDBBTABLE, 'acb')
-			->condition($field,$value, $operator)
-			->fields('acb', array('acbid','url','data'));
+	static private function load_data($field = NULL,
+																		$value = NULL,
+																		$operator = NULL,
+																		array $fields = NULL,
+																		$pager = NULL,
+																		$order = NULL) {
+		$query = db_select(self::DDBBTABLE, 'acb');
+		if (isset($pager)) {
+			$query->extend('PagerDefault');
+			
+		}
+		if(!is_null($field) & !is_null($value) & !is_null($operator) ) {
+			$query->condition($field, $value, $operator);
+		}
+		if(is_null($fields)){
+			$query->fields('acb');
+		}
+		else {
+			$query->fields('acb', $fields);
+		}
+		
 		$query->addTag('acb_load');
+		
+		if (isset($order)) {
+			$query->orderby("acb.$order");
+		}
 		$result= $query->execute();
 	  $records = $result->fetchAll();
 		return $records;
