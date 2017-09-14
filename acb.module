@@ -46,7 +46,7 @@ function acb_menu() {
     'page arguments' => array('node',1),
     'access arguments' => array('administer acb layout'),
     'type' => MENU_LOCAL_TASK,
-    'file' => 'acb_page.inc'
+    'file' => 'acb.page.inc'
   ];
 
   $items['admin/structure/acb'] = [
@@ -92,6 +92,15 @@ function acb_menu() {
     'file' => 'src/Form/acb_delete_layout.php'
   ];
   
+  $items['admin/structure/acb/%acb_record/edit'] = [
+    'title' => 'Block layout',
+    'page callback' => 'acb_edit_record',
+    'page arguments' => array(3),
+    'access arguments' => array('administer acb layout'),
+    'type' => MENU_CALLBACK,
+    'file' => 'acb.edit.inc'
+  ];
+  
   $items['acb/acb_load_block_autocomplete_callback'] = [
     'page callback' => '\Drupal\\acb\\Helper\\AcbLoadBlock::get_blocks',
     'file' =>'src/Helper/AcbHelper.php',
@@ -116,6 +125,14 @@ function acb_admin_paths() {
   return $paths;
 }
 
+/**
+ * @param $id
+ *
+ * @return mixed|null
+ */
+function acb_record_load($id) {
+  return AcbModelClass::load_by_id($id)[0];
+}
 
 /**
  * Implements hook_page_alter().
