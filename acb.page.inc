@@ -2,11 +2,11 @@
 
 use Drupal\acb\Model\AcbModelClass;
 /**
- * @file acb_page.inc
+ * @file acb.page.inc
  */
 
-function acb_node_configure_block($type, $object) {
-  $path = $type.'/'.$object->nid;
+function acb_node_configure_block($type, $node) {
+  $path = $type.'/'.$node->nid;
   
   $acb = new AcbModelClass();
   $acb_record = $acb->load_by_url($path);
