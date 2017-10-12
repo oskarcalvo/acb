@@ -59,7 +59,7 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
 
 	$blocks = isset($acb_record->data) ? $acb_record->data : NULL ;
   foreach ($theme_regions as $theme_name => $regions) {
-
+    
     $form['theme'][$theme_name] = [
       '#type' => 'fieldset',
       '#title' => $theme_name,
@@ -88,11 +88,10 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
       ){
 	      $form_state['block_number'][$theme_name][$machine_name] =  $quantity_blocks;
       }
+  
+      $collapsed = (  count($blocks[$theme_name][$machine_name]) === 0) ? TRUE : FALSE;
       
-      
-
-      $collapsed = ( $form_state['block_number'][$theme_name][$machine_name] > 1) ? FALSE : TRUE;
-
+      $wadus = '';
       $form['theme'][$theme_name][$machine_name] = [
         '#type' => 'fieldset',
         '#title' => $human_name,
