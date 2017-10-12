@@ -13,7 +13,7 @@ function acb_list_elements() {
 		['data' =>'URL'],
 		['data' => 'operations']
 	];
-	
+	$rows = [];
 	foreach ($items as $item) {
 		$rows[] = [
 			['data' => $item->url],
