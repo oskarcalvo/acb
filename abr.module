@@ -6,8 +6,8 @@ module_load_include('php', 'abr', 'src/Helper/AbrLoadBlock');
  * @file abr.module
  */
 
-use Drupal\abr\Model\abrModelClass;
-use Drupal\abr\Helper\abrHelper;
+use Drupal\abr\Model\AbrModelClass;
+use Drupal\abr\Helper\AbrHelper;
 
 /**
  * Implements hook_help().
