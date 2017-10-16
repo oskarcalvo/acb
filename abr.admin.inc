@@ -1,13 +1,13 @@
 <?php
 
-use Drupal\acb\Model\AcbModelClass;
-use Drupal\acb\Helper\AcbHelper;
+use Drupal\abr\Model\AbrModelClass;
+use Drupal\abr\Helper\AbrHelper;
 /**
- * @file acb.admin.inc
+ * @file abr.admin.inc
  */
 
-function acb_list_elements() {
-	$items = AcbModelClass::list_of_items();
+function abr_list_elements() {
+	$items = AbrModelClass::list_of_items();
 	
 	$header = [
 		['data' =>'URL'],
@@ -17,7 +17,7 @@ function acb_list_elements() {
 	foreach ($items as $item) {
 		$rows[] = [
 			['data' => $item->url],
-			['data' => AcbHelper::operations_links($item->acbid)]
+			['data' => AbrHelper::operations_links($item->abrid)]
 		];
 	}
 	

@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\acb\Helper;
-use Drupal\acb\Model\AcbBlockModelClass;
+namespace Drupal\abr\Helper;
+use Drupal\abr\Model\AbrBlockModelClass;
 
-Class AcbHelper {
+Class AbrHelper {
 	
 
 	public static function get_renderized_block (array $blocks, $region, $theme) {
@@ -15,7 +15,7 @@ Class AcbHelper {
       $block_delta[] = rtrim(explode(':', $block)[1],']');
     }
     
-    $blocks_info = AcbBlockModelClass::get_block_filter_by_delta_theme($block_delta,$theme);
+    $blocks_info = AbrBlockModelClass::get_block_filter_by_delta_theme($block_delta,$theme);
     
     array_map(function($block)use ($region){
       $block->status = "1";
@@ -63,7 +63,7 @@ Class AcbHelper {
 	 * @return array
 	 */
 	public static function get_enabled_themes(){
-		$cache = cache_get('acb_enabled_themes');
+		$cache = cache_get('abr_enabled_themes');
 		unset($cache->data);
 		if (isset($cache->data)) {
 			$data = $cache->data;
@@ -75,14 +75,14 @@ Class AcbHelper {
 					return $theme;
 				}
 			});
-			cache_set('acb_enabled_themes', $data);
+			cache_set('abr_enabled_themes', $data);
 		}
 		return $data;
 	}
 	
 	public static function operations_links($id) {
-		$edit = l(t('Edit'), 'admin/structure/acb/'.$id.'/edit');
-		$delete = l(t('Delete'),'admin/structure/acb/'.$id.'/delete');
+		$edit = l(t('Edit'), 'admin/structure/abr/'.$id.'/edit');
+		$delete = l(t('Delete'),'admin/structure/abr/'.$id.'/delete');
 		
 		return $edit .' | ' . $delete;
 	}
@@ -92,7 +92,7 @@ Class AcbHelper {
 	 * @return array
 	 */
 	public static function get_regions(array $list_theme){
-		$cache = cache_get('acb_theme_regions');
+		$cache = cache_get('abr_theme_regions');
 		unset($cache->data);
 		if (isset($cache->data)) {
 			$data = $cache->data;
@@ -101,7 +101,7 @@ Class AcbHelper {
 			$data = array_map(function ($theme) {
 				return system_region_list($theme->name);
 			}, $list_theme);
-			cache_set('acb_theme_regions', $data);
+			cache_set('abr_theme_regions', $data);
 		}
 		return $data;
 	}
@@ -125,9 +125,12 @@ Class AcbHelper {
 				foreach ($themes[$theme][$machine_name] as $key => $result){
 					if(empty($themes[$theme][$machine_name][$key])) {
 						unset($themes[$theme][$machine_name][$key]);
-					}else {
+					}
+					/*
+					else {
 						$themes[$theme][$machine_name][$key] = $themes[$theme][$machine_name][$key];
 					}
+					*/
 				}
 			}
 		}

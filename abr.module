@@ -1,0 +1,168 @@
+<?php
+module_load_include('php', 'abr', 'src/Form/abr_layout_form');
+module_load_include('php', 'abr', 'src/Form/abr_settings_form');
+module_load_include('php', 'abr', 'src/Helper/abrLoadBlock');
+/**
+ * @file abr.module
+ */
+
+use Drupal\abr\Model\abrModelClass;
+use Drupal\abr\Helper\abrHelper;
+
+/**
+ * Implements hook_help().
+ */
+function abr_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help/#abr':
+      return
+        '<p>'. t('abr it\'s an alternative layout sistem to Drupal block core, context, panelizer, and panels.') .'</p>'.
+        '<p>'. t('The aproach in abr module is thay you can select by url where do you want to have your blocks') .'</p>';
+      break;
+  }
+}
+
+
+/**
+ * Implements hook_permission().
+ */
+function abr_permission() {
+  return [
+    'administer abr layout' => [
+      'title' => t('Administer abr layout'),
+      'description' => t('Perfom administration tasks for abr module.'),
+    ],
+  ];
+}
+/**
+ * Implements hook_menu().
+ */
+function abr_menu() {
+  $items = [];
+  
+  $items['node/%node/block_layout'] = [
+    'title' => 'Block layout',
+    'page callback' => 'abr_node_configure_block',
+    'page arguments' => array('node',1),
+    'access arguments' => array('administer abr layout'),
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'abr.page.inc'
+  ];
+
+  $items['admin/structure/abr'] = [
+		'title' => t('abr block layout'),
+		'description' => t('abr module options'),
+		'page callback' => 'abr_list_elements',
+		'access arguments' => ['administer abr layout'],
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'abr.admin.inc',
+  ];
+	$items['admin/structure/abr/list'] = [
+		'title' => t('Block Layout'),
+		'page callback' => 'abr_list_elements',
+		'access arguments' => ['administer abr layout'],
+		'type' => MENU_DEFAULT_LOCAL_TASK,
+		'file' => 'abr.admin.inc',
+	];
+  
+  $items['admin/structure/abr/settings'] = [
+    'title' => t('Configure abr settings'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['abr_settings_form'],
+    'access arguments' => ['administer abr layout'],
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'src/Form/abr_settings_form.php',
+  ];
+  
+  $items['admin/structure/abr/add'] = [
+    'title' => t('Alternative block layout'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['abr_layout_form'],
+    'access arguments' => ['administer abr layout'],
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'src/Form/abr_layout_form.php'
+  ];
+  
+  $items['admin/structure/abr/%/delete'] = [
+    'title' => t('Delete this option'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['abr_delete_layout'],
+    'access arguments' => ['administer abr layout'],
+    'type' => MENU_CALLBACK,
+    'file' => 'src/Form/abr_delete_layout.php'
+  ];
+  
+  $items['admin/structure/abr/%abr_record/edit'] = [
+    'title' => 'Block layout',
+    'page callback' => 'abr_edit_record',
+    'page arguments' => array(3),
+    'access arguments' => array('administer abr layout'),
+    'type' => MENU_CALLBACK,
+    'file' => 'abr.edit.inc'
+  ];
+  
+  $items['abr/abr_load_block_autocomplete_callback'] = [
+    'page callback' => '\Drupal\\abr\\Helper\\abrLoadBlock::get_blocks',
+    'file' =>'src/Helper/abrHelper.php',
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+  ];
+
+  return $items;
+}
+/*
+https://api.drupal.org/api/drupal/modules!block!block.api.php/function/hook_block_list_alter/7.x
+*/
+
+
+/**
+ * Implements hook_admin_paths().
+ */
+function abr_admin_paths() {
+  $paths = [
+    'node/*/block_layout' => TRUE
+  ];
+  return $paths;
+}
+
+/**
+ * @param $id
+ *
+ * @return mixed|null
+ */
+function abr_record_load($id) {
+  return abrModelClass::load_by_id($id)[0];
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function abr_page_alter(&$page) {
+  global $theme;
+  $object = menu_get_object();
+  
+  if (isset($object->type) && isset($object->nid)) {
+    $blocks_by_url = new abrModelClass;
+    $url_blocks = $blocks_by_url->load_by_url('node/'.$object->nid);
+    
+    if(is_object($url_blocks) && isset($url_blocks->data)) {
+  
+      $raw_blocks = unserialize($url_blocks->data);
+  
+      if (isset($raw_blocks[$theme])) {
+        $blocks_pre_build = abrHelper::clean_array($raw_blocks[$theme]);
+        
+        foreach ($blocks_pre_build as $region => $blocks) {
+      		unset($page[$region]);
+          $blocks = abrHelper::get_renderized_block($blocks, $region, $theme);
+          $order = abrHelper::order_of_block($raw_blocks[$theme][$region]);
+          $page[$region] = abrHelper::clean_array(array_replace($order, $blocks));
+      
+        }
+      }
+    }
+  }
+  
+}
+
+

@@ -1,9 +1,9 @@
 name = Alternativa Configuration for blocks
 description = You can configure where do you want to print your blocks by paths
 core = 7.x
-configure = admin/structure/acb
+configure = admin/structure/abr
 dependencies[] = block
 dependencies[] = xautoload
-files[] = src/Form/acb_layout_form.php
-files[] = src/Form/acb_settings_form.php
+files[] = src/Form/abr_layout_form.php
+files[] = src/Form/abr_settings_form.php
 files[] = src/*/*.php

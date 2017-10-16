@@ -1,8 +1,8 @@
 <?php
 
-namespace Drupal\acb\Helper;
+namespace Drupal\abr\Helper;
 
-class AcbClassLoader {
+class AbrClassLoader {
 	private $type;
 	private $module;
 	private $name;

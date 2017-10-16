@@ -1,7 +1,7 @@
 <?php
 
-use Drupal\acb\Helper\AcbHelper;
-use Drupal\acb\Model\AcbModelClass;
+use Drupal\abr\Helper\AbrHelper;
+use Drupal\abr\Model\AbrModelClass;
 /**
  * @file Form to configure the layout.
  */
@@ -10,13 +10,13 @@ use Drupal\acb\Model\AcbModelClass;
  * @param array  $form
  * @param array  $form_state
  * @param string  $path
- * @param object  $acb
+ * @param object  $abr
  *
  * @return mixed
  */
-function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) {
+function abr_layout_form($form, &$form_state, $path = NULL, $abr_record = NULL) {
   
-  $theme_regions = AcbHelper::get_enabled_theme_regions();
+  $theme_regions = AbrHelper::get_enabled_theme_regions();
   
 	$form_state['storage']['theme_regions'] = $theme_regions;
 	$form['#tree'] = TRUE;
@@ -29,14 +29,14 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
     '#size' => 60,
     '#maxlength' => 128,
     '#required' => TRUE,
-    '#element_validate' => ['_acb_validate_url'],
+    '#element_validate' => ['_abr_validate_url'],
   ];
   
-  $acbid = (isset($acb_record) && isset($acb_record->acbid)) ? $acb_record->acbid : '';
-  $form['acbid'] = [
+  $abrid = (isset($abr_record) && isset($abr_record->abrid)) ? $abr_record->abrid : '';
+  $form['abrid'] = [
 		'#type' => 'hidden',
 		'#title' => t('id'),
-		'#default_value' => $acbid,
+		'#default_value' => $abrid,
 		'#size' => 60,
 		'#maxlength' => 128,
 		'#required' => TRUE,
@@ -57,7 +57,7 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
     '#title' => t('Configure layout'),
   ];
 
-	$blocks = isset($acb_record->data) ? $acb_record->data : NULL ;
+	$blocks = isset($abr_record->data) ? $abr_record->data : NULL ;
   foreach ($theme_regions as $theme_name => $regions) {
     
     $form['theme'][$theme_name] = [
@@ -71,27 +71,22 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
 	
 	    $quantity_blocks = count($blocks[$theme_name][$machine_name]);
 	    
-      if( $quantity_blocks == 0 &&
-      	 empty( $form_state['block_number'][$theme_name][$machine_name])) {
+      if( $quantity_blocks == 0 && empty( $form_state['block_number'][$theme_name][$machine_name])) {
 	      $form_state['block_number'][$theme_name][$machine_name] = 1;
       }
         
       if( $quantity_blocks >= 1 &&
-	      isset( $form_state['block_number'][$theme_name][$machine_name]) &&
-	      $quantity_blocks >=  $form_state['block_number'][$theme_name][$machine_name]
-      ) {
+          isset( $form_state['block_number'][$theme_name][$machine_name]) &&
+          $quantity_blocks >=  $form_state['block_number'][$theme_name][$machine_name]) {
 	      $form_state['block_number'][$theme_name][$machine_name] =  $quantity_blocks;
       }
       
-      if( $quantity_blocks >= 1 &&
-      !isset( $form_state['block_number'][$theme_name][$machine_name])
-      ){
+      if( $quantity_blocks >= 1 && !isset( $form_state['block_number'][$theme_name][$machine_name])) {
 	      $form_state['block_number'][$theme_name][$machine_name] =  $quantity_blocks;
       }
   
       $collapsed = (  count($blocks[$theme_name][$machine_name]) === 0) ? TRUE : FALSE;
       
-      $wadus = '';
       $form['theme'][$theme_name][$machine_name] = [
         '#type' => 'fieldset',
         '#title' => $human_name,
@@ -107,15 +102,14 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
           '#title' => t('Block'),
 	        '#default_value' => isset($blocks[$theme_name][$machine_name][$i])
 		        ? $blocks[$theme_name][$machine_name][$i] : '',
-          '#autocomplete_path' => 'acb/acb_load_block_autocomplete_callback',
-	        
+          '#autocomplete_path' => 'abr/abr_load_block_autocomplete_callback'
         ];
       }
 
       $form['theme'][$theme_name][$machine_name]['add_item'] = array(
         '#type' => 'submit',
         '#value' => t("Add another block in $theme_name - $machine_name"),
-        '#submit' => ['acb_layout_form_add_item'],
+        '#submit' => ['abr_layout_form_add_item'],
         '#attributes' => [
           'theme' => [$theme_name],
           'region' => [$machine_name],
@@ -136,7 +130,7 @@ function acb_layout_form($form, &$form_state, $path = NULL, $acb_record = NULL) 
  * @param $form
  * @param $form_state
  */
-function acb_layout_form_add_item($form, &$form_state) {
+function abr_layout_form_add_item($form, &$form_state) {
 
   $region = $form_state['clicked_button']['#attributes']['region'][0];
   $theme = $form_state['clicked_button']['#attributes']['theme'][0];
@@ -145,20 +139,20 @@ function acb_layout_form_add_item($form, &$form_state) {
 
 }
 
-function acb_layout_form_submit($form, &$form_state) {
+function abr_layout_form_submit($form, &$form_state) {
 	
 	unset($form_state['values']['theme']['theme__active_tab']);
-	$results = AcbHelper::clean_submited_values(
+	$results = AbrHelper::clean_submited_values(
 		$form_state['values']['theme'],
 		$form_state['storage']['theme_regions']
 	);
-	$new_record = new AcbModelClass();
-	if(isset($form_state['values']['acbid']) && ($form_state['values']['acbid']) ){
+	$new_record = new AbrModelClass();
+	if(isset($form_state['values']['abrid']) && ($form_state['values']['abrid']) ){
 		//update a record
 		$new_record->update(
 			$form_state['values']['url'],
 			$results,
-			$form_state['values']['acbid']
+			$form_state['values']['abrid']
 		);
 	}else {
 		// save new record
@@ -174,6 +168,6 @@ function acb_layout_form_submit($form, &$form_state) {
  * @param array $url
  * @return bool
  */
-function _acb_validate_url($url) {
+function _abr_validate_url($url) {
 	return (url_is_external($url['#value']) === TRUE) ?  FALSE : TRUE;
 }

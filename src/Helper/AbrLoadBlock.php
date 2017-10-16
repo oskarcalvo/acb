@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\acb\Helper;
-use Drupal\acb\Model\AcbBlockModelClass;
+namespace Drupal\abr\Helper;
+use Drupal\abr\Model\AbrBlockModelClass;
 
 /**
  * @file
  */
 
-class AcbLoadBlock {
+class AbrLoadBlock {
 	
 	/**
 	 * This method is a copy from the function		 +	 * @return null|array
@@ -39,7 +39,7 @@ class AcbLoadBlock {
 	 * @return null|array
 	 */
 	public static function selected_modules() {
-		return variable_get('acb_list_modules', ['all' => 'ALL']);
+		return variable_get('abr_list_modules', ['all' => 'ALL']);
 	}
 	
 	/**
@@ -50,7 +50,7 @@ class AcbLoadBlock {
 		$list_of_modules = self::selected_modules();
 		
 		// Load all the blocks availables in those modules
-		$blocks = AcbBlockModelClass::list_of_blocks($list_of_modules);
+		$blocks = AbrBlockModelClass::list_of_blocks($list_of_modules);
 		
 		// Prepare blocks
 		$blocks = self::build_blocks_array($blocks);
@@ -124,4 +124,15 @@ class AcbLoadBlock {
 			return (object) $info;
 		}
 	}
+  
+  /**
+   *
+   */
+	public static function get_detault_blocks(){
+	  global $theme;
+    $all_regions = system_region_list($theme);
+    foreach (array_keys($all_regions) as $region) {
+    
+    }
+  }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\acb\Model;
+namespace Drupal\abr\Model;
 
-use Drupal\acb\Helper\AcbLoadBlock;
+use Drupal\abr\Helper\abrLoadBlock;
 
-class AcbBlockModelClass {
+class AbrBlockModelClass {
   
   /**
    * @param array $list_of_modules
@@ -14,7 +14,7 @@ class AcbBlockModelClass {
 	static public function list_of_blocks(array $list_of_modules) {
 		
 		if(isset($list_of_modules['all'])){
-			$list_of_modules = AcbLoadBlock::list_of_modules_with_blocks();
+			$list_of_modules = AbrLoadBlock::list_of_modules_with_blocks();
 		}
 		
 		foreach ($list_of_modules as $module) {

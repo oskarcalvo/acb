@@ -2,18 +2,18 @@
 
 /**
  * @file
- * Install, update, and uninstall functions for the Foo Acb module.
+ * Install, update, and uninstall functions for the Foo Alternative Block Region (abr) module.
  */
 
-function acb_schema() {
-  $schema['acb_layout'] = [
+function abr_schema() {
+  $schema['abr_layout'] = [
     'description' => t('Stores the layout configurations'),
     'fields' => [
-      'acbid' => [
+      'abrid' => [
         'type' => 'serial',
         'not null' => TRUE,
         'unsigned' => TRUE,
-        'description' => 'Primary Key: Unique acb id.',
+        'description' => 'Primary Key: Unique abr id.',
       ],
       'url' => [
         'type' => 'varchar',
@@ -28,7 +28,7 @@ function acb_schema() {
         'description' => 'The value of the variable.',
       ],
     ],
-    'primary key' => ['acbid'],
+    'primary key' => ['abrid'],
   ];
 
   return $schema;

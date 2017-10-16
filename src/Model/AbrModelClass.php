@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\acb\Model;
+namespace Drupal\abr\Model;
 
-use Drupal\acb\Model\AcbModelInterface;
+use Drupal\abr\Model\AbrModelInterface;
 use stdClass;
 
-class AcbModelClass implements AcbModelInterface {
+class AbrModelClass implements abrModelInterface {
 	
-	const DDBBTABLE = 'acb_layout';
+	const DDBBTABLE = 'abr_layout';
 	
 	/**
 	 * @param $id
@@ -15,7 +15,7 @@ class AcbModelClass implements AcbModelInterface {
 	 * @return mixed
 	 */
 	static public function load_by_id($id){
-		return self::load_data('acbid',$id,'=');
+		return self::load_data('abrid',$id,'=');
 	}
 	
 	/**
@@ -35,16 +35,19 @@ class AcbModelClass implements AcbModelInterface {
 	 * @return array
 	 */
 	static function list_of_items() {
-		$result = self::load_data(NULL,NULL,NULL,['acbid','url']);
+		$result = self::load_data(NULL,NULL,NULL,['abrid','url']);
 		return $result;
 	}
-	/**
-	 * @param $field
-	 * @param $value
-	 * @param $operator
-	 *
-	 * @return mixed
-	 */
+  
+  /**
+   * @param null $field
+   * @param null $value
+   * @param null $operator
+   * @param array|NULL $fields
+   * @param null $pager
+   * @param null $order
+   * @return mixed
+   */
 	static private function load_data($field = NULL,
 																		$value = NULL,
 																		$operator = NULL,
@@ -52,7 +55,7 @@ class AcbModelClass implements AcbModelInterface {
 																		$pager = NULL,
 																		$order = NULL)
   {
-		$query = db_select(self::DDBBTABLE, 'acb');
+		$query = db_select(self::DDBBTABLE, 'abr');
 		if (isset($pager)) {
 			$query->extend('PagerDefault');
 			
@@ -61,16 +64,16 @@ class AcbModelClass implements AcbModelInterface {
 			$query->condition($field, $value, $operator);
 		}
 		if(is_null($fields)){
-			$query->fields('acb');
+			$query->fields('abr');
 		}
 		else {
-			$query->fields('acb', $fields);
+			$query->fields('abr', $fields);
 		}
 		
-		$query->addTag('acb_load');
+		$query->addTag('abr_load');
 		
 		if (isset($order)) {
-			$query->orderby("acb.$order");
+			$query->orderby("abr.$order");
 		}
 		$result= $query->execute();
 	  $records = $result->fetchAll();
@@ -103,8 +106,8 @@ class AcbModelClass implements AcbModelInterface {
 		$record = new stdClass();
 		$record->url = $url;
 		$record->data = serialize($data);
-		$record->acbid = $id;
-		return drupal_write_record(self::DDBBTABLE, $record, ['acbid']);
+		$record->abrid = $id;
+		return drupal_write_record(self::DDBBTABLE, $record, ['abrid']);
 	}
 	
 	/**
@@ -113,20 +116,20 @@ class AcbModelClass implements AcbModelInterface {
 	 */
 	static public function delete($id){
 	  $delete = db_delete(self::DDBBTABLE)
-      ->condition('acbid', $id, '=')
+      ->condition('abrid', $id, '=')
       ->execute();
 	  return $delete;
 	}
 	
 	public static function url_exist($url) {
-		$query = db_select(self::DDBBTABLE, 'acb')
+		$query = db_select(self::DDBBTABLE, 'abr')
 			->condition('url', $url, '=')
-			->fields('acb',['acbid']);
-		$query->addTag('acb_url_exist');
+			->fields('abr',['abrid']);
+		$query->addTag('abr_url_exist');
 		$result =  $query->execute();
-		$records = $result->fetchAllAssoc('acbid');
+		$records = $result->fetchAllAssoc('abrid');
 		foreach ($records as $record){
-			$output = $record->acbid;
+			$output = $record->abrid;
 		}
 		return $output;
 	}
