@@ -1,5 +1,5 @@
-name = Alternativa Configuration for blocks
-description = You can configure where do you want to print your blocks by paths
+name = Alternativa Block Regions
+description = This module help you to configure blocks into regions in a diferent way.
 core = 7.x
 configure = admin/structure/abr
 dependencies[] = block

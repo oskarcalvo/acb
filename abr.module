@@ -1,7 +1,7 @@
 <?php
 module_load_include('php', 'abr', 'src/Form/abr_layout_form');
 module_load_include('php', 'abr', 'src/Form/abr_settings_form');
-module_load_include('php', 'abr', 'src/Helper/abrLoadBlock');
+module_load_include('php', 'abr', 'src/Helper/AbrLoadBlock');
 /**
  * @file abr.module
  */
@@ -131,7 +131,7 @@ function abr_admin_paths() {
  * @return mixed|null
  */
 function abr_record_load($id) {
-  return abrModelClass::load_by_id($id)[0];
+  return AbrModelClass::load_by_id($id)[0];
 }
 
 /**
@@ -142,7 +142,7 @@ function abr_page_alter(&$page) {
   $object = menu_get_object();
   
   if (isset($object->type) && isset($object->nid)) {
-    $blocks_by_url = new abrModelClass;
+    $blocks_by_url = new AbrModelClass;
     $url_blocks = $blocks_by_url->load_by_url('node/'.$object->nid);
     
     if(is_object($url_blocks) && isset($url_blocks->data)) {
@@ -150,13 +150,13 @@ function abr_page_alter(&$page) {
       $raw_blocks = unserialize($url_blocks->data);
   
       if (isset($raw_blocks[$theme])) {
-        $blocks_pre_build = abrHelper::clean_array($raw_blocks[$theme]);
+        $blocks_pre_build = AbrHelper::clean_array($raw_blocks[$theme]);
         
         foreach ($blocks_pre_build as $region => $blocks) {
       		unset($page[$region]);
-          $blocks = abrHelper::get_renderized_block($blocks, $region, $theme);
-          $order = abrHelper::order_of_block($raw_blocks[$theme][$region]);
-          $page[$region] = abrHelper::clean_array(array_replace($order, $blocks));
+          $blocks = AbrHelper::get_renderized_block($blocks, $region, $theme);
+          $order = AbrHelper::order_of_block($raw_blocks[$theme][$region]);
+          $page[$region] = AbrHelper::clean_array(array_replace($order, $blocks));
       
         }
       }
