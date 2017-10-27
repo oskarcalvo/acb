@@ -58,7 +58,7 @@ function abr_menu() {
     'file' => 'abr.admin.inc',
   ];
 	$items['admin/structure/abr/list'] = [
-		'title' => t('Block Layout'),
+		'title' => t('Block region'),
 		'page callback' => 'abr_list_elements',
 		'access arguments' => ['administer abr layout'],
 		'type' => MENU_DEFAULT_LOCAL_TASK,
@@ -75,7 +75,7 @@ function abr_menu() {
   ];
   
   $items['admin/structure/abr/add'] = [
-    'title' => t('Alternative block layout'),
+    'title' => t('Alternative block region'),
     'page callback' => 'drupal_get_form',
     'page arguments' => ['abr_layout_form'],
     'access arguments' => ['administer abr layout'],
@@ -93,7 +93,7 @@ function abr_menu() {
   ];
   
   $items['admin/structure/abr/%abr_record/edit'] = [
-    'title' => 'Block layout',
+    'title' => 'Block region',
     'page callback' => 'abr_edit_record',
     'page arguments' => array(3),
     'access arguments' => array('administer abr layout'),
@@ -102,8 +102,8 @@ function abr_menu() {
   ];
   
   $items['abr/abr_load_block_autocomplete_callback'] = [
-    'page callback' => '\Drupal\\abr\\Helper\\abrLoadBlock::get_blocks',
-    'file' =>'src/Helper/abrHelper.php',
+    'page callback' => '\Drupal\\abr\\Helper\\AbrLoadBlock::get_blocks',
+    'file' =>'src/Helper/AbrHelper.php',
     'type' => MENU_CALLBACK,
     'access arguments' => array('access content'),
   ];
