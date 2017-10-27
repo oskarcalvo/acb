@@ -69,9 +69,14 @@ function abr_layout_form($form, &$form_state, $path = NULL, $abr_record = NULL) 
 	
     foreach ($regions as $machine_name => $human_name) {
 	
-	    $quantity_blocks = count($blocks[$theme_name][$machine_name]);
-	    
-      if( $quantity_blocks == 0 && empty( $form_state['block_number'][$theme_name][$machine_name])) {
+      if(isset($blocks[$theme_name][$machine_name])) {
+        $quantity_blocks = count($blocks[$theme_name][$machine_name]);
+      } else {
+        $quantity_blocks = 0;
+      }
+      
+      
+      if( $quantity_blocks === 0 && empty( $form_state['block_number'][$theme_name][$machine_name])) {
 	      $form_state['block_number'][$theme_name][$machine_name] = 1;
       }
         
@@ -85,7 +90,7 @@ function abr_layout_form($form, &$form_state, $path = NULL, $abr_record = NULL) 
 	      $form_state['block_number'][$theme_name][$machine_name] =  $quantity_blocks;
       }
   
-      $collapsed = (  count($blocks[$theme_name][$machine_name]) === 0) ? TRUE : FALSE;
+      $collapsed = ($quantity_blocks === 0) ? TRUE : FALSE;
       
       $form['theme'][$theme_name][$machine_name] = [
         '#type' => 'fieldset',
